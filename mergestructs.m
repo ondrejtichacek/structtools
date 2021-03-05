@@ -1,4 +1,4 @@
-function S = mergestructs(S, T)
+function S = mergestructs(S, T, args)
 %MERGESTRUCTS Combines fields of both input structures into a single structure
 %   Output structure will contain all fields and their corresponding values of
 %   the two input structures. If a field is present in both input structures,
@@ -25,13 +25,16 @@ function S = mergestructs(S, T)
     arguments
         S(1,1) struct
         T(1,1) struct
+        args.nowarn (1,1) logical = false
     end
 
     f = fieldnames(T);
     for i = 1:length(f)
         if isfield(S, f{i})
-            warning("structtools:commonfield",...
-                "Field '%s' exists in both structures.", f{i});
+            if args.nowarn == false
+                warning("structtools:commonfield",...
+                    "Field '%s' exists in both structures.", f{i});
+            end
             continue
         end
         S.(f{i}) = T.(f{i});
